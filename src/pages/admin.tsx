@@ -36,20 +36,15 @@ export default function AdminPanel() {
     setLoading(true);
     
     // AQUI ESTA LA MAGIA: Usamos la función RPC que creamos en Supabase
-    // Esto nos trae el email (de auth) y el rol (de profiles) juntos
     const { data: usersData, error } = await supabase.rpc('get_all_users');
-
-    // Cargamos los buses para el selector
     const { data: busesData } = await supabase.from('buses').select('*');
     
     if (error) {
       console.error("Error cargando usuarios:", error);
-      // No alertamos si es un error menor, solo log
     }
     
-    // Si la RPC devuelve datos, los usamos
     if (usersData) {
-        // Ordenamos por email localmente por si acaso
+        // Ordenamos por email localmente
         const sorted = (usersData as any[]).sort((a, b) => a.email.localeCompare(b.email));
         setUsers(sorted);
     }
@@ -61,7 +56,6 @@ export default function AdminPanel() {
 
   // 3. Actualizar Rol o Bus
   async function updateUser(userId: string, field: 'role' | 'bus_id', value: any) {
-    // Si el valor es "", lo convertimos a null para la base de datos
     const finalValue = value === "" ? null : value;
 
     const { error } = await supabase
@@ -72,7 +66,6 @@ export default function AdminPanel() {
     if (error) {
       alert("Error actualizando: " + error.message);
     } else {
-      // Actualización optimista en la UI para que se sienta rápido
       setUsers(users.map(u => u.user_id === userId ? { ...u, [field]: finalValue } : u));
     }
   }
@@ -95,7 +88,7 @@ export default function AdminPanel() {
   return (
     <div className="min-h-screen bg-slate-900 text-white p-6 relative overflow-hidden font-sans">
       
-      {/* Luces de fondo (Efecto Neón) - Con pointer-events-none para no bloquear clicks */}
+      {/* Luces de fondo */}
       <div className="absolute top-0 left-0 w-96 h-96 bg-blue-600 rounded-full mix-blend-multiply filter blur-[128px] opacity-20 animate-blob pointer-events-none"></div>
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-600 rounded-full mix-blend-multiply filter blur-[128px] opacity-20 animate-blob animation-delay-2000 pointer-events-none"></div>
 
@@ -111,22 +104,16 @@ export default function AdminPanel() {
           </div>
           
           <div className="flex gap-3">
-             <button 
-              onClick={() => fetchData()}
-              className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 rounded-lg text-sm transition-all flex items-center gap-2"
-            >
+             <button onClick={() => fetchData()} className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 rounded-lg text-sm transition-all flex items-center gap-2">
               🔄 Recargar
             </button>
-            <button 
-              onClick={handleLogout}
-              className="px-5 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 rounded-lg text-sm transition-colors shadow-lg font-medium"
-            >
+            <button onClick={handleLogout} className="px-5 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 rounded-lg text-sm transition-colors shadow-lg font-medium">
               Cerrar Sesión
             </button>
           </div>
         </div>
 
-        {/* Tabla Estilizada */}
+        {/* Tabla */}
         <div className="bg-slate-800/40 backdrop-blur-xl rounded-2xl border border-slate-700/50 shadow-2xl overflow-hidden ring-1 ring-white/5">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
@@ -140,8 +127,6 @@ export default function AdminPanel() {
               <tbody className="divide-y divide-slate-700/50">
                 {users.map((user) => (
                   <tr key={user.user_id} className="hover:bg-slate-700/30 transition-colors group">
-                    
-                    {/* Columna Email */}
                     <td className="p-6">
                       <div className="flex items-center">
                         <div className={`h-10 w-10 rounded-full flex items-center justify-center mr-4 text-sm font-bold shadow-lg ${
@@ -157,8 +142,6 @@ export default function AdminPanel() {
                         </div>
                       </div>
                     </td>
-
-                    {/* Columna Rol */}
                     <td className="p-6">
                       <div className="relative">
                         <select 
@@ -176,14 +159,8 @@ export default function AdminPanel() {
                             <option value="driver" className="bg-slate-800">🚌 Conductor</option>
                             <option value="admin" className="bg-slate-800">🛡️ Admin</option>
                         </select>
-                        {/* Icono de flecha custom para mejor UI */}
-                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-500">
-                            <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-                        </div>
                       </div>
                     </td>
-
-                    {/* Columna Bus */}
                     <td className="p-6">
                       {user.role === 'driver' ? (
                         <select
@@ -193,39 +170,19 @@ export default function AdminPanel() {
                         >
                           <option value="">-- Sin Asignar --</option>
                           {buses.map(b => (
-                            <option key={b.id} value={b.id}>
-                                {b.label || `Bus ${b.id.slice(0,4)}`}
-                            </option>
+                            <option key={b.id} value={b.id}>{b.label || `Bus ${b.id.slice(0,4)}`}</option>
                           ))}
                         </select>
                       ) : (
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-800 text-slate-500">
-                          No aplica
-                        </span>
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-800 text-slate-500">No aplica</span>
                       )}
                     </td>
-
                   </tr>
                 ))}
-                
-                {users.length === 0 && (
-                    <tr>
-                        <td colSpan={3} className="p-12 text-center text-slate-500">
-                            No se encontraron usuarios o la base de datos está vacía.
-                        </td>
-                    </tr>
-                )}
               </tbody>
             </table>
           </div>
         </div>
-        
-        <div className="mt-6 text-center">
-            <span className="inline-block px-4 py-1 rounded-full bg-slate-800 text-xs text-slate-500 border border-slate-700">
-                Total Registros: {users.length}
-            </span>
-        </div>
-
       </div>
     </div>
   );

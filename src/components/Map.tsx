@@ -36,7 +36,7 @@ const nearestStopIcon = L.icon({
 });
 
 const busIcon = L.icon({
-  iconUrl: "https://cdn-icons-png.flaticon.com/512/3448/3448339.png", 
+  iconUrl: "/bus.png", 
   iconSize: [40, 40],
   iconAnchor: [20, 20],
 });
@@ -96,12 +96,33 @@ export default function Map() {
   }
 
   async function loadRoute(map: L.Map) {
-    const { data, error } = await supabase.from("routes").select("geojson").single();
-    if (error || !data) return;
-    L.geoJSON(data.geojson, {
-      style: { weight: 5, opacity: 0.8, color: '#2563eb' },
+    const { data, error } = await supabase
+      .from("routes")
+      .select("geojson")
+      .limit(1);
+
+    if (error) {
+      console.error("Error cargando ruta:", error);
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      console.warn("No hay rutas en la tabla routes");
+      return;
+    }
+
+    const route = data[0].geojson;
+
+    if (!route) {
+      console.warn("La ruta no tiene geojson");
+      return;
+    }
+
+    L.geoJSON(route, {
+      style: { weight: 5, opacity: 0.8, color: "#2563eb" },
     }).addTo(map);
   }
+
 
   function distanceMeters(lat1: number, lon1: number, lat2: number, lon2: number) {
     const R = 6371e3;
@@ -116,9 +137,13 @@ export default function Map() {
   function getNearestStop(lat: number, lon: number) {
     if (!quadTreeRef.current) return null;
 
-    const range = new Rectangle(lat, lon, 0.005, 0.005);
-    const candidates = quadTreeRef.current.query(range); 
+    const range = new Rectangle(lat, lon, 0.01, 0.01);
+    let candidates = quadTreeRef.current.query(range); 
     
+    if (candidates.length === 0) {
+       candidates = stopsRef.current.map(s => ({ x: s.lat, y: s.lon, data: s }));
+    }
+
     let minDist = Infinity;
     let nearest: { stop: Stop; distance: number } | null = null;
 

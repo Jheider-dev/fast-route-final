@@ -1,5 +1,3 @@
-// src/utils/Graph.ts
-
 interface Edge {
   node: string; 
   weight: number; 

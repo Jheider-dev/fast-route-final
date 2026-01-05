@@ -1,5 +1,3 @@
-// src/utils/QuadTree.ts
-
 export interface Point {
   x: number; 
   y: number; 
