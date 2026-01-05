@@ -96,12 +96,33 @@ export default function Map() {
   }
 
   async function loadRoute(map: L.Map) {
-    const { data, error } = await supabase.from("routes").select("geojson").single();
-    if (error || !data) return;
-    L.geoJSON(data.geojson, {
-      style: { weight: 5, opacity: 0.8, color: '#2563eb' },
+    const { data, error } = await supabase
+      .from("routes")
+      .select("geojson")
+      .limit(1);
+
+    if (error) {
+      console.error("Error cargando ruta:", error);
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      console.warn("No hay rutas en la tabla routes");
+      return;
+    }
+
+    const route = data[0].geojson;
+
+    if (!route) {
+      console.warn("La ruta no tiene geojson");
+      return;
+    }
+
+    L.geoJSON(route, {
+      style: { weight: 5, opacity: 0.8, color: "#2563eb" },
     }).addTo(map);
   }
+
 
   function distanceMeters(lat1: number, lon1: number, lat2: number, lon2: number) {
     const R = 6371e3;
