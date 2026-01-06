@@ -296,7 +296,7 @@ export default function Map() {
     loadRoute(map);
 
     // Clic para simular ubicación
-    map.on("click", (e: L.LeafletMouseEvent) => updateUserPosition(e.latlng.lat, e.latlng.lng));
+    //map.on("click", (e: L.LeafletMouseEvent) => updateUserPosition(e.latlng.lat, e.latlng.lng));
 
     const channel = supabase
       .channel("positions-tracker")
