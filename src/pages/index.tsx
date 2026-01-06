@@ -60,7 +60,7 @@ export default function LandingPage() {
       {/* Hero Section */}
       <main className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-4 mt-10">
         <div className="inline-block px-4 py-1.5 mb-6 rounded-full border border-blue-500/30 bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:text-blue-300 text-xs font-semibold tracking-wide uppercase transition-colors">
-          Versión 1.0 • Universidad Nacional del Altiplano
+          Versión 2.0 • Universidad Nacional del Altiplano
         </div>
         
         <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 leading-tight text-slate-900 dark:text-white transition-colors">
