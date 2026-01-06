@@ -104,7 +104,7 @@ export default function AdminPanel() {
             <p className="text-slate-400 text-sm">Sistema de Gestión de Transporte</p>
           </div>
           <div className="flex gap-3">
-             <button onClick={() => fetchData()} className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-sm transition-all">🔄 Recargar</button>
+             <button onClick={() => fetchData()} className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-sm transition-all">Recargar</button>
             <button onClick={handleLogout} className="px-5 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 rounded-lg text-sm">Salir</button>
           </div>
         </div>
