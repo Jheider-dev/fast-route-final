@@ -320,7 +320,7 @@ export default function Map() {
       {/* HEADER */}
       <header className="h-16 flex items-center justify-between px-4 bg-slate-900 border-b border-slate-800 shadow-xl z-50">
         <div className="flex items-center gap-3">
-          <img src="/logo.png" alt="Logo" className="w-8 h-8 object-contain" onError={(e) => e.currentTarget.src = '/bus.png'} />
+          <img src="/logo_fast_route.png" alt="Logo" className="w-8 h-8 object-contain" onError={(e) => e.currentTarget.src = '/bus.png'} />
           <span className="font-extrabold tracking-wider text-white text-lg hidden sm:block">FAST ROUTE</span>
         </div>
 

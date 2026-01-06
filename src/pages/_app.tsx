@@ -1,6 +1,6 @@
 import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
-import Head from 'next/head' // <--- IMPORTANTE
+import Head from 'next/head'
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -8,7 +8,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <Head>
         <title>Fast Route | UNA Puno</title>
         <meta name="description" content="Sistema de Transporte Universitario Inteligente" />
-        <link rel="icon" href="/bus.png" /> {/* Usa tu icono del bus aquí */}
+        <link rel="icon" href="/logo_fast_route.png" />
       </Head>
       <Component {...pageProps} />
     </>
