@@ -6,7 +6,6 @@ import { supabase } from '../lib/supabase';
 export default function LoginPage() {
   const router = useRouter();
   
-  // Estados del formulario
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -76,7 +75,7 @@ export default function LoginPage() {
               className="w-full px-4 py-3 bg-slate-900/50 border border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white placeholder-slate-500 outline-none transition"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="tu@uni.edu.pe"
+              placeholder="tu@est.unap.edu.pe"
               required
             />
           </div>
